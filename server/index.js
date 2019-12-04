@@ -1,12 +1,19 @@
 var express = require("express");
+var bodyParser = require('body-parser');
+
+var app = express();
+app.use(bodyParser.json());
+
 var getArticles = require('./get-articles');
 var getArticleTypes = require('./get-article-types');
+var getMessageList = require('./get-message-list');
+var addMessage = require('./add-message');
 
 var getHtml = require('./page-tpl');
 
-var app = express();
 
-var articlesPath = '../article-list'
+var articlesPath = '../article-list';
+var messagePath = '../message/index.txt';
 
 app.use(express.static('../public'));
 app.use('/article-list', express.static(articlesPath));
@@ -75,9 +82,24 @@ app.get('/article-type-list', function (req, res) {
     res.end(getHtml(html));
 });
 
-// post的请求方式.get('pathName',fn);
-app.post('/', function (req, res) {
-    res.end('111s1');
+// message
+// 获取message列表
+app.get('/messages', function (req, res) {
+    getMessageList(messagePath, function (str) {
+        res.end(str);
+    });
+});
+
+// 发送message
+app.post('/message', function (req, res) {
+    // 追加内容
+    addMessage(messagePath, req.body, function (err) {
+        if (err) {
+            res.end(err);
+        } else {
+            res.end(JSON.stringify({ success: true }));
+        }
+    });
 });
 
 // 监听端口
