@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>tools</title>
+</head>
+<body>
+<div>
+<input id="tools-input" style="width:500px;height:30px;" />
+<button id="tools-btn">getResult</button>
+<input id="tools-text" style="width: 500px;height:30px;" />
+</div>
+<form id="types">
+<div>
+<input type="radio" name="type" value="aBC2A_B_C" id="aBC2A_B_C" checked />
+<label for="aBC2A_B_C">aBC to A_B_C</label>
+</div>
+<div>
+<input type="radio" name="type" value="A_B_C2aBC" id="A_B_C2aBC" />
+<label for="A_B_C2aBC">A_B_C to aBC</label>
+</div>
+<div>
+<input type="radio" name="type" value="ABC2a-b-c" id="ABC2a-b-c" />
+<label for="ABC2a-b-c">ABC to a-b-c</label>
+</div>
+<div>
+<input type="radio" name="type" value="a-b-c2A_B_C" id="a-b-c2A_B_C" />
+<label for="a-b-c2A_B_C">a-b-c to ABC</label>
+</div>
+</form>
+
+</body>
+<script>
+var input = document.getElementById('tools-input');
+var btn = document.getElementById('tools-btn');
+var text = document.getElementById('tools-text');
+var types = document.getElementById('types');
+
+btn.addEventListener('click', function () {
+var data = new FormData(types);
+var type = '';
+var inputText = input.value;
+for (const entry of data) {
+type = entry[1];
+};
+	console.log(type, inputText);
+			text.value = map[type] && map[type](inputText);
+				});
+					var map = {
+							'aBC2A_B_C': function (str) {
+										return str.replace(/([A-Z])/g, '_$1').toUpperCase();
+												},
+														'A_B_C2aBC': function (str) {
+																	return str.toLowerCase().replace(/_[a-z]/g, function (s) {
+																					return s.replace('_', '').toUpperCase();
+																								});
+																										},
+																												'ABC2a-b-c': function (str) {
+																															return str.replace(/([A-Z])/g, '-$1').replace('-', '').toLowerCase();
+																																	},
+																																			'a-b-c2A_B_C': function (str) {
+																																						return str.replace(/-[a-z]/g, function (s) {
+																																										return s.replace('-', '').toUpperCase();
+																																													}).replace(/^[a-z]/, function (s) {
+																																																	return s.toUpperCase();
+																																																				});
+																																																						}
+																																																							}
+																																																							</script>
+</html>
