@@ -15,8 +15,9 @@ function getMessageList(messagePath, cb) {
             // 仅输出读取的字节
             if (bytes > 0) {
                 var str = buf.slice(0, bytes).toString();
-                if (str.slice(0, 1)) {
-                    str = str.replace(',', '');
+                str = str.slice(1);
+                if (str.slice(0, 1) === ',') {
+                    str = str.slice(1);
                 }
                 cb('[' + str + ']');
             }
