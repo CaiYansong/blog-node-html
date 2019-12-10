@@ -104,8 +104,8 @@
             xhr.onload = function () {
                 var res = JSON.parse(xhr.responseText);
                 if (res.success) {
-                    alert('成功, 点击确定刷新页面');
-                    location.reload();
+                    alert('成功, 点击确定前往文章列表页');
+                    location.href = "/article-list";
                 }
             };
         });
