@@ -37,7 +37,8 @@ function addArticle(articlePath, data, cb = () => { }) {
     path += '/' + data.title + '-' + data.dateTime + '.html';
 
     var articleTpl = getArticleTpl(data);
-    var html = getHtml(articleTpl);
+    var html = getHtml(articleTpl, data.title);
+
     fs.writeFile(path, html, function (err) {
         if (err) {
             cb(err);
