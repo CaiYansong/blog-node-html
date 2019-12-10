@@ -56,10 +56,23 @@ function addStaticListener(path) {
     });
 }
 
+
 /**
  * 文章类型列表
  */
 app.get('/article-type-list', function (req, res) {
+    var types = [];
+
+    getArticleTypes(articlesPath, types);
+
+    res.writeHead(200, { 'Content-Type': 'text/html;charset=utf-8' });
+    res.end(JSON.stringify(types));
+});
+
+/**
+ * 文章类型列表页面
+ */
+app.get('/article-type-list-page', function (req, res) {
     var types = [];
 
     getArticleTypes(articlesPath, types);
