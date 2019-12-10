@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/index.css">
+    <title>添加文章</title>
+    <style>
+        .add-article-wrap {
+            width: 100%;
+            padding: 20px 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .article-title {
+            width: 100%;
+            line-height: 24px;
+            max-width: 800px;
+            outline: none;
+            margin-bottom: 20px;
+        }
+
+        .article-content {
+            width: 100%;
+            max-width: 800px;
+            min-height: 300px;
+            outline: none;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+
+        .article-types {
+            min-width: 80px;
+            border: 1px solid #ccc;
+            outline: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header" class="header">
+        <div class="header-wrap">
+            <a class="logo" href="/">
+                <img src="/imgs/dog_128px.png" />
+            </a>
+            <div class="nav">
+                <a href="/">首页</a>
+                <a href="/article-list">文章列表</a>
+                <a href="/note.html">记事本</a>
+                <a href="/about.html">关于</a>
+            </div>
+        </div>
+    </div>
+    <div id="root" class="root">
+        <div class="add-article-wrap">
+            <input class="article-title" />
+            <div class="article-content" contenteditable="true"></div>
+            <div>
+                <select class="article-types">
+
+                </select>
+                <button class="save">保存</button>
+            </div>
+        </div>
+    </div>
+    <div id="footer" class="footer">
+        <div class="footer-wrap">
+            <a href="http://www.beian.miit.gov.cn/" target="_blank">浙ICP备19046722号</a>
+        </div>
+    </div>
+</body>
+<script>
+    var listItemTpl = '<option value="$!{value}">$!{value}</option>';
+    getArticleTypes();
+    addArticle();
+
+    function addArticle() {
+        var titleEle = document.querySelector('.article-title');
+        var contentEle = document.querySelector('.article-content');
+        var typeEle = document.querySelector('.article-types');
+        var saveBtn = document.querySelector('.save');
+        saveBtn.addEventListener('click', function () {
+            var title = titleEle.value
+            if (!title) {
+                return;
+            }
+            var xhr = new XMLHttpRequest();
+            xhr.open('post', '/article');
+            xhr.setRequestHeader('Content-type', 'application/json');
+            xhr.send(JSON.stringify({
+                id: Date.now(),
+                title: title,
+                content: contentEle.innerHTML,
+                type: typeEle.value,
+                ip: 'TODO:',
+                dateTime: Date.now()
+            }));
+            xhr.onload = function () {
+                var res = JSON.parse(xhr.responseText);
+                if (res.success) {
+                    alert('成功, 点击确定刷新页面');
+                    location.reload();
+                }
+            };
+        });
+    }
+
+    function getArticleTypes() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('get', '/article-type-list');
+        xhr.send('');
+        xhr.onload = function () {
+            if (xhr.responseText) {
+                var list = JSON.parse(xhr.responseText);
+                var html = '<option value="">/</option>';
+                for (var i = 0; i < list.length; i++) {
+                    var item = list[i];
+                    item = item.replace(/\.+[\/\\]{1}.+[\/\\]{1}/, '');
+                    var itemStr = listItemTpl;
+                    itemStr = itemStr.replace('$!{value}', item);
+                    itemStr = itemStr.replace('$!{value}', '/' + item);
+                    html += itemStr;
+                }
+                var listEle = document.querySelector('.article-types');
+                listEle.innerHTML = html;
+            }
+        };
+    }
+</script>
+
+</html>
