@@ -8,6 +8,7 @@ var getArticles = require('./get-articles');
 var getArticleTypes = require('./get-article-types');
 var getMessageList = require('./get-message-list');
 var addMessage = require('./add-message');
+var addArticle = require('./add-article');
 
 var getHtml = require('./page-tpl');
 
@@ -93,6 +94,19 @@ app.get('/article-type-list-page', function (req, res) {
 
     res.writeHead(200, { 'Content-Type': 'text/html;charset=utf-8' });
     res.end(getHtml(html));
+});
+
+// 添加文章
+app.post('/article', function (req, res) {
+    res.writeHead(200, { 'Content-Type': 'text/html;charset=utf-8' });
+
+    addArticle(articlesPath, req.body, function (err) {
+        if (err) {
+            res.end(err);
+        } else {
+            res.end(JSON.stringify({ success: true }));
+        }
+    });
 });
 
 // message
