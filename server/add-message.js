@@ -11,9 +11,13 @@ function addMessage(messagePath, data, cb) {
     }
     if (typeof data === 'object') {
         data.value = data.value && data.value.slice(4);
-        if (!data.value) {
-            return;
-        }
+		if(!data.value){
+			return;
+		}
+		if(data.value.slice(0,1)==='\n'){
+			data.value = data.value.slice(1);
+		}
+		data.value = data.value.replace('\n','<br />')
         data = JSON.stringify(data);
     }
     data = ',' + data;

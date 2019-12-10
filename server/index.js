@@ -44,7 +44,7 @@ function addStaticListener(path) {
             var link = linkTpl.replace('{href}', href);
 
             var title = '';
-            item.replace(/\/([^\/]+)\.html$/, function (val, $1) {
+            item.replace(/\\([^\\]+)\.html$/, function (val, $1) {
                 title = $1;
             });
             var link = link.replace('{title}', title);
@@ -71,7 +71,7 @@ app.get('/article-type-list', function (req, res) {
         var link = linkTpl.replace('{href}', href);
 
         var type = '';
-        item.replace(/\/[^\/]+$/, function (val) {
+        item.replace(/\\[^\\]+$/, function (val) {
             type = val;
         });
         var link = link.replace('{type}', type);
@@ -86,12 +86,14 @@ app.get('/article-type-list', function (req, res) {
 // 获取message列表
 app.get('/messages', function (req, res) {
     getMessageList(messagePath, function (str) {
+		res.writeHead(200, { 'Content-Type': 'text/html;charset=utf-8' });
         res.end(str);
     });
 });
 
 // 发送message
 app.post('/message', function (req, res) {
+	res.writeHead(200, { 'Content-Type': 'text/html;charset=utf-8' });
     // 追加内容
     addMessage(messagePath, req.body, function (err) {
         if (err) {
