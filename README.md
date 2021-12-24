@@ -1,2 +1,2 @@
-# myBlog@0.0.2
+# myBlog
 node server + HTML
